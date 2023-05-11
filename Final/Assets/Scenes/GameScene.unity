@@ -634,10 +634,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   counter: 0
-  target: 1
+  target: 3
   beginText: {fileID: 929030697}
   endText: {fileID: 1349781029}
   arrowImg: {fileID: 1359645591}
+  backgroundImage: {fileID: 684637679}
+  bgMaterials:
+  - {fileID: 2100000, guid: 7e7e792c396d043969f000575e64f979, type: 2}
+  - {fileID: 2100000, guid: 51325ba4e946e47f4b08e52b992749c8, type: 2}
+  - {fileID: 2100000, guid: f237c5efcf6f440f9b6f18ab52cd29a9, type: 2}
+  - {fileID: 2100000, guid: 3100d1162f1534e37b8885ab41f67b66, type: 2}
 --- !u!4 &858709673
 Transform:
   m_ObjectHideFlags: 0

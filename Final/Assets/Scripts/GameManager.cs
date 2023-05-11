@@ -10,13 +10,27 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     public int counter = 0;
-    public int target = 1;   // will be changed based on number of levels
+    public int target = 3;   // will be changed based on number of levels
 
     public TextMeshProUGUI beginText;
     public TextMeshProUGUI endText;
 
     public Image arrowImg;
     private float arrowImgOpacity;
+
+    public GameObject backgroundImage;
+    public Material[] bgMaterials = new Material[4];
+
+    public int Counter
+    {
+        get { return counter;}
+        set
+        {
+            counter = value;
+            Debug.Log(counter);
+            UpdateBG();
+        }
+    }
     
     private void Awake()
     {
@@ -30,6 +44,9 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        // bg img initialize
+        backgroundImage.GetComponent<Renderer>().material = bgMaterials[0];
     }
 
     // Start is called before the first frame update
@@ -42,12 +59,27 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         arrowImg.color = new Vector4(arrowImg.color.r, arrowImg.color.g, arrowImg.color.b, 255 * Mathf.Sin(Time.time * 6));
-        Debug.Log(arrowImg.color.a);
-        if (counter == target)
+        // Debug.Log(arrowImg.color.a);
+
+        if (Input.GetKeyUp("space"))
         {
-            // Debug.Log("target achieved");
+            Counter++;
+            Debug.Log(Counter);
+        }
+        
+        
+        if (Counter == target || Input.GetKey(KeyCode.A))
+        {
+            Debug.Log("Counter: " + Counter);
+            Debug.Log("Target: " + target);
+            Debug.Log("target achieved");
             ThrowPlane.Instance.gameObject.SetActive(false);
             endText.gameObject.SetActive(true);
         }
+    }
+
+    void UpdateBG()
+    {
+        backgroundImage.GetComponent<Renderer>().material = bgMaterials[counter];
     }
 }

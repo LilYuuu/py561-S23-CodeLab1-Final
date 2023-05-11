@@ -17,11 +17,11 @@ public class HitWindow : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter(Collider collider)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collider.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player"))
         {
-            GameManager.Instance.counter += 1;
+            GameManager.Instance.Counter++;
             Debug.Log("hit window!");
         }
     }
