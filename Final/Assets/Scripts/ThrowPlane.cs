@@ -16,6 +16,8 @@ public class ThrowPlane : MonoBehaviour
     private float maxPlaneSpd = 230;
     private Vector3 angle;
 
+    private float posY;
+
     private Vector3 newPlanePos, resetPlanePos;
     private Quaternion resetPlaneRotation;
     private Vector3 resetCameraPos;
@@ -56,6 +58,34 @@ public class ThrowPlane : MonoBehaviour
         {
             Invoke("ResetPlane", 1.5f);
         }
+    }
+
+    private void FixedUpdate()
+    {
+        if (GameManager.Instance.Counter >= 1)
+        {
+            if (Input.GetKey(KeyCode.W))
+            {
+                // Debug.Log("going up");
+                FlyUpward();
+            }
+
+            if (Input.GetKey(KeyCode.S))
+            {
+                // Debug.Log("going down");
+                FlyDownward();
+            }
+        }
+    }
+
+    void FlyUpward()
+    {
+        rb.AddForce(new Vector3(0, 25f, 0));
+    }
+
+    void FlyDownward()
+    {
+        rb.AddForce(new Vector3(0, -20f, 0));
     }
 
     void ResetPlane()
@@ -118,6 +148,7 @@ public class ThrowPlane : MonoBehaviour
             rb.isKinematic = false;
             rb.AddForce(new Vector3(angle.x * planeSpd, angle.y * planeSpd * 0.7f, angle.z * planeSpd));
             // Invoke("ResetPlane", 4f);
+            
         }
         else
         {
@@ -134,7 +165,7 @@ public class ThrowPlane : MonoBehaviour
     {
         if (swipeTime > 0)
         {
-            planeSpd = swipeDistance * swipeTime * 30;
+            planeSpd = swipeDistance * swipeTime * 0.6f;
         }
 
         if (planeSpd > maxPlaneSpd)
