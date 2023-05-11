@@ -15,7 +15,6 @@ public class ThrowPlane : MonoBehaviour
     private float planeSpd = 0;
     private float maxPlaneSpd = 230;
     private Vector3 angle;
-    private float posY;
 
     private Vector3 newPlanePos, resetPlanePos;
     private Quaternion resetPlaneRotation;
@@ -51,31 +50,12 @@ public class ThrowPlane : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -12f, 7f),
+            transform.position.z);
         if (transform.position.y <= -10f)
         {
             Invoke("ResetPlane", 1.5f);
         }
-        
-        if (GameManager.Instance.Counter == 1)
-        {
-            Debug.Log("Enable key control");
-            
-            if (Input.GetKeyDown(KeyCode.W))    // going up
-            { 
-                posY = transform.position.y;
-                posY += 0.1f;
-                posY = Mathf.Clamp(posY, -12f, 7f);
-            }
-
-            if (Input.GetKeyDown(KeyCode.S))    // going down
-            {
-                posY = transform.position.y;
-                posY -= 0.1f;
-                posY = Mathf.Clamp(posY, -12f, 7f);
-            }
-        }
-        
-        transform.position = new Vector3(transform.position.x, posY, transform.position.z);
     }
 
     void ResetPlane()
