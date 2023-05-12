@@ -12,6 +12,8 @@ public class CollectibleScript : MonoBehaviour
         {
             Debug.Log("Collected!");
             collectibleCounter++;
+            GameManager.Instance.collectibles.Remove(this.gameObject);
+            Debug.Log(GameManager.Instance.collectibles);
             Destroy(this.gameObject);
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ThrowPlane : MonoBehaviour
@@ -106,7 +107,21 @@ public class ThrowPlane : MonoBehaviour
         Camera.main.transform.position = resetCameraPos;
 
         flying = false;
+
+        // Reset spawn-related state
+        GameManager.Instance.spawned = false;
         
+        // Destroy left collectibles
+        int nbCollectibles = GameManager.Instance.collectibles.Count; 
+        if (nbCollectibles > 0)
+        {
+            for (var i = nbCollectibles - 1; i >= 0; i--)
+            {
+                Destroy(GameManager.Instance.collectibles[i].gameObject);
+                GameManager.Instance.collectibles.RemoveAt(i);
+            }
+        }
+
         // GameManager.Instance.beginText.gameObject.SetActive(true);
         // GameManager.Instance.beginText.text = "Let's try again";
     }

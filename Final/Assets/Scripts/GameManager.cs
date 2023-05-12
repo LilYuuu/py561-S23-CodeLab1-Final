@@ -5,6 +5,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -28,7 +29,10 @@ public class GameManager : MonoBehaviour
 
     // Spawning collectibles
     public CollectibleSpawner spawner;
-
+    public bool spawned = false;
+    public List<GameObject> collectibles;
+    // public GameObject[] collectibles = new GameObject[3];
+        
     // Properties of level counter
     public int Counter
     {
@@ -63,12 +67,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         arrowImgOpacity = arrowImg.color.a;
-        
-        // Spawn three collectibles on start
-        for (var i = 0; i < 3; i++)
-        {
-            spawner.SpawnCollectible(new Vector3(0, Random.Range(-4.0f, 6.0f), Random.Range(3.0f, 150.0f)));
-        }
     }
 
     // Update is called once per frame
@@ -84,6 +82,22 @@ public class GameManager : MonoBehaviour
             Debug.Log(Counter);
         }
         
+        // Level 2： with collectibles
+        if (Counter == 2)
+        {
+            if (!spawned)
+            {
+                // Spawn three collectibles
+                for (var i = 0; i < 3; i++)
+                {
+                    GameObject newCollectible = spawner.SpawnCollectible(new Vector3(0, Random.Range(-4.0f, 6.0f), Random.Range(3.0f, 150.0f)));
+                    collectibles.Add(newCollectible);
+                    // collectibles[i] = newCollectible;
+                }
+                spawned = true;
+            }
+        }
+
         // When game ends
         if (Counter == target || Input.GetKey(KeyCode.A))
         {
