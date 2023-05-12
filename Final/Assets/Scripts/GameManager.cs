@@ -72,9 +72,8 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        arrowImg.color = new Vector4(arrowImg.color.r, arrowImg.color.g, arrowImg.color.b, 255 * Mathf.Sin(Time.time * 6));
-        // Debug.Log(arrowImg.color.a);
-
+        arrowImg.color = Color.Lerp(new Color(arrowImg.color.r, arrowImg.color.g, arrowImg.color.b, 1), new Color(arrowImg.color.r, arrowImg.color.g, arrowImg.color.b, 0), Mathf.Sin(Time.time * 5));
+        
         // For debug use
         if (Input.GetKeyUp("space"))
         {

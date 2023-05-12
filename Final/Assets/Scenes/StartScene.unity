@@ -674,6 +674,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89391258b79bc4f6daf77cf1b1973370, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  planeObject: {fileID: 756892869}
 --- !u!65 &756892871
 BoxCollider:
   m_ObjectHideFlags: 0
