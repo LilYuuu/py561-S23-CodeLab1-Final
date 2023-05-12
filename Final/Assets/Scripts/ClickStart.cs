@@ -8,7 +8,6 @@ public class ClickStart : MonoBehaviour
 {
     private void OnMouseUp()
     {
-        
         SceneManager.LoadScene(1);
     }
 }

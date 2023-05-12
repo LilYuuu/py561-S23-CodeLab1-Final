@@ -15,9 +15,7 @@ public class ThrowPlane : MonoBehaviour
     private float planeSpd = 0;
     private float maxPlaneSpd = 230;
     private Vector3 angle;
-
-    private float posY;
-
+    
     private Vector3 newPlanePos, resetPlanePos;
     private Quaternion resetPlaneRotation;
     private Vector3 resetCameraPos;
@@ -27,7 +25,7 @@ public class ThrowPlane : MonoBehaviour
 
     void Awake()
     {
-        // singleton
+        // Singleton
         if (Instance == null)
         {
             DontDestroyOnLoad(gameObject);
@@ -62,6 +60,7 @@ public class ThrowPlane : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // If at level 1, enable keyboard control
         if (GameManager.Instance.Counter >= 1)
         {
             if (Input.GetKey(KeyCode.W))
@@ -127,6 +126,7 @@ public class ThrowPlane : MonoBehaviour
 
     private void OnMouseDrag()
     {
+        // Move the plane based on mouse pos
         Vector3 mousePos = Input.mousePosition;
         mousePos.z = Camera.main.WorldToScreenPoint(transform.position).z;
         newPlanePos = Camera.main.ScreenToWorldPoint(mousePos);
@@ -135,6 +135,7 @@ public class ThrowPlane : MonoBehaviour
 
     private void OnMouseUp()
     {
+        // Calculate the force on mouse release
         endTime = Time.time;
         endMousePos = Input.mousePosition;
         swipeDistance = (endMousePos - startMousePos).magnitude;
