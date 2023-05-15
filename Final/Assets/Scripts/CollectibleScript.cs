@@ -4,16 +4,14 @@ using UnityEngine;
 
 public class CollectibleScript : MonoBehaviour
 {
-    public int collectibleCounter = 0;
+    // public int collectibleCounter = 0;
 
     public void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Collected!");
-            collectibleCounter++;
+            GameManager.Instance.ScoreCounter++;
             GameManager.Instance.collectibles.Remove(this.gameObject);
-            Debug.Log(GameManager.Instance.collectibles);
             Destroy(this.gameObject);
         }
     }

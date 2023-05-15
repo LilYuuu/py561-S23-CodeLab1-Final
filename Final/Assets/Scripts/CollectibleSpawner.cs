@@ -9,7 +9,7 @@ public class CollectibleSpawner : MonoBehaviour
 
     public GameObject SpawnCollectible(Vector3 position)
     {
-        GameObject newCollectible = Instantiate(collectiblePrefab, position, Quaternion.identity);
+        GameObject newCollectible = Instantiate(collectiblePrefab, position, Quaternion.Euler(18, 0, 90));
         return newCollectible;
     }
 }

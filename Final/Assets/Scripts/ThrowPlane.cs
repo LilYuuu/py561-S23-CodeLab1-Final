@@ -23,6 +23,7 @@ public class ThrowPlane : MonoBehaviour
     private Rigidbody rb;
 
     public bool flying = false;
+    public bool fell = false;
 
     void Awake()
     {
@@ -45,7 +46,7 @@ public class ThrowPlane : MonoBehaviour
         resetPlanePos = transform.position;
         resetPlaneRotation = transform.rotation;
         resetCameraPos = Camera.main.transform.position;
-        ResetPlane();
+        // ResetPlane();
     }
 
     // Update is called once per frame
@@ -55,14 +56,21 @@ public class ThrowPlane : MonoBehaviour
             transform.position.z);
         if (transform.position.y <= -10f)
         {
-            Invoke("ResetPlane", 1.5f);
+            fell = true;
         }
+
+        if (fell)
+        {
+            Invoke("ResetPlane", 5f);
+            fell = false;
+        }
+        
     }
 
     private void FixedUpdate()
     {
         // If at level 1, enable keyboard control
-        if (GameManager.Instance.Counter >= 1)
+        if (GameManager.Instance.LevelCounter >= 1)
         {
             if (Input.GetKey(KeyCode.W))
             {
@@ -108,20 +116,25 @@ public class ThrowPlane : MonoBehaviour
 
         flying = false;
 
-        // Reset spawn-related state
-        GameManager.Instance.spawned = false;
-        
-        // Destroy left collectibles
-        int nbCollectibles = GameManager.Instance.collectibles.Count; 
-        if (nbCollectibles > 0)
+        if (GameManager.Instance.LevelCounter == 2)
         {
-            for (var i = nbCollectibles - 1; i >= 0; i--)
+            GameManager.Instance.ScoreCounter = 0;
+            
+            // Reset spawn-related state
+            GameManager.Instance.spawned = false;
+        
+            // Destroy left collectibles
+            int nbCollectibles = GameManager.Instance.collectibles.Count; 
+            if (nbCollectibles > 0)
             {
-                Destroy(GameManager.Instance.collectibles[i].gameObject);
-                GameManager.Instance.collectibles.RemoveAt(i);
+                for (var i = nbCollectibles - 1; i >= 0; i--)
+                {
+                    Destroy(GameManager.Instance.collectibles[i].gameObject);
+                    GameManager.Instance.collectibles.RemoveAt(i);
+                }
             }
         }
-
+        
         // GameManager.Instance.beginText.gameObject.SetActive(true);
         // GameManager.Instance.beginText.text = "Let's try again";
     }
@@ -133,9 +146,37 @@ public class ThrowPlane : MonoBehaviour
         
         if (GameManager.Instance.gameObject.activeSelf)
         {
-            Debug.Log("remove text");
-            GameManager.Instance.beginText.gameObject.SetActive(false);
-            GameManager.Instance.arrowImg.gameObject.SetActive(false);
+            // Debug.Log("remove text");
+            
+            // Arrow
+            if (GameManager.Instance.arrowImg.gameObject.activeSelf)
+            {
+                GameManager.Instance.arrowImg.gameObject.SetActive(false);
+                Debug.Log("arrow");
+            }
+            
+            // Begin text
+            if (GameManager.Instance.beginText.gameObject.activeSelf)
+            {
+                GameManager.Instance.beginText.gameObject.SetActive(false);
+            }
+            
+            // Level 1 hint
+            // if (GameManager.Instance.level1HintText.gameObject.activeSelf)
+            // {
+            //     GameManager.Instance.level1HintDisplayed = true;
+            //     GameManager.Instance.level1HintText.gameObject.SetActive(false);
+            //     Debug.Log("level 1 hint");
+            //     Debug.Log(GameManager.Instance.level1HintDisplayed);
+            // }
+            
+            // Level 2 hint
+            // if (GameManager.Instance.level2HintText.gameObject.activeSelf)
+            // {
+            //     GameManager.Instance.level2HintDisplayed = true;
+            //     GameManager.Instance.level2HintText.gameObject.SetActive(false);
+            //     Debug.Log("level 2 hint");
+            // }
         }
     }
 

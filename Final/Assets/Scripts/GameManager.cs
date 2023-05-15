@@ -12,12 +12,25 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     // Keep track of the levels
-    public int counter = 0;
-    public int target = 3;   // will be changed based on number of levels
+    public int levelCounter = 0;
+    public int levelTarget = 3;   // will be changed based on number of levels
+    // Update text info for level
+    public TextMeshProUGUI levelValueText;
+    public bool levelUpgraded = false;
 
+    // Score
+    public int scoreCounter = 0;
+    public TextMeshProUGUI scoreDisplayText;
+    public TextMeshProUGUI scoreValueText;
+    
     // Text display
     public TextMeshProUGUI beginText;
     public TextMeshProUGUI endText;
+    public TextMeshProUGUI level1HintText;
+    public bool level1HintDisplayed = false;
+    public TextMeshProUGUI level2HintText;
+    public bool level2HintDisplayed = false;
+    public TextMeshProUGUI hitWindowText;
 
     // Arrow indication
     public Image arrowImg;
@@ -32,16 +45,35 @@ public class GameManager : MonoBehaviour
     public bool spawned = false;
     public List<GameObject> collectibles;
     // public GameObject[] collectibles = new GameObject[3];
+    
+    // Letters
+    public Image letter0;
+    public Image letter1;
+    public Image letter2;
         
     // Properties of level counter
-    public int Counter
+    public int LevelCounter
     {
-        get { return counter;}
+        get { return levelCounter;}
         set
         {
-            counter = value;
-            Debug.Log(counter);
-            UpdateBG();
+            levelCounter = value;
+            Debug.Log("Level: " + levelCounter);
+            if (levelCounter < levelTarget)
+            {
+                Invoke("UpdateBG", 5f);    
+            }
+        }
+    }
+    
+    public int ScoreCounter
+    {
+        get { return scoreCounter;}
+        set
+        {
+            scoreCounter = value;
+            Debug.Log("Score: " + scoreCounter);
+            UpdateScoreText();
         }
     }
     
@@ -77,15 +109,30 @@ public class GameManager : MonoBehaviour
         // For debug use
         if (Input.GetKeyUp("space"))
         {
-            Counter++;
-            Debug.Log(Counter);
+            LevelCounter++;
+            Debug.Log("Level: " + LevelCounter);
+        }
+        
+        // Remove hit window text
+        if (levelUpgraded)
+        {
+            Invoke("HideHitWindowText", 2f);
+        }
+        
+        // Level 1: keyboard control
+        if (LevelCounter == 1)
+        {
+            Invoke("DisplayLevel1HintText", 5f);
         }
         
         // Level 2： with collectibles
-        if (Counter == 2)
+        if (LevelCounter == 2)
         {
             if (!spawned)
             {
+                spawned = true;
+                Invoke("DisplayLevel2HintText", 5f);
+                
                 // Spawn three collectibles
                 for (var i = 0; i < 3; i++)
                 {
@@ -93,23 +140,58 @@ public class GameManager : MonoBehaviour
                     collectibles.Add(newCollectible);
                     // collectibles[i] = newCollectible;
                 }
-                spawned = true;
+                Debug.Log("spawned: " + spawned);
+                
             }
         }
 
         // When game ends
-        if (Counter == target || Input.GetKey(KeyCode.A))
+        if (LevelCounter == levelTarget || Input.GetKey(KeyCode.A))
         {
-            Debug.Log("Counter: " + Counter);
-            Debug.Log("Target: " + target);
-            Debug.Log("Target achieved");
+            Debug.Log("Game finished");
             ThrowPlane.Instance.gameObject.SetActive(false);
             endText.gameObject.SetActive(true);
+            
+            // Invoke("Restart", 5f);
         }
     }
 
     void UpdateBG()
     {
-        backgroundImage.GetComponent<Renderer>().material = bgMaterials[counter];
+        backgroundImage.GetComponent<Renderer>().material = bgMaterials[levelCounter];
+        levelValueText.text = (levelCounter + 1) + " / 3";
+    }
+
+    void UpdateScoreText()
+    {
+        scoreValueText.text = scoreCounter + " / 3";
+    }
+
+    void HideHitWindowText()
+    {
+        hitWindowText.gameObject.SetActive(false);
+        levelUpgraded = false;
+    }
+
+    void DisplayLevel1HintText()
+    {
+        // arrowImg.gameObject.SetActive(true);
+        level1HintText.gameObject.SetActive(true);
+        level1HintDisplayed = false;
+    }
+
+    void DisplayLevel2HintText()
+    {
+        level1HintText.gameObject.SetActive(false);
+        
+        // arrowImg.gameObject.SetActive(true);
+        level2HintText.gameObject.SetActive(true);
+        scoreDisplayText.gameObject.SetActive(true);
+        scoreValueText.gameObject.SetActive(true);
+    }
+
+    void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
